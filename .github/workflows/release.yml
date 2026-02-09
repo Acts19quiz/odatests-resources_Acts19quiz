@@ -13,9 +13,13 @@ jobs:
     steps:
     - name: Checkout source
       uses: actions/checkout@v6
+    - name: Delete git files
+      run: |
+        Remove-Item -Recurse -Force .git
+        Get-ChildItem -Recurse -Include .git* | Remove-Item -Force -Recurse
     - name: Create zip of resources
       run: |
-        Compress-Archive -Path README.md, demolist.ini, demos, wads -DestinationPath odatests-resources.zip -CompressionLevel Optimal
+        Compress-Archive -Path * -DestinationPath odatests-resources.zip -CompressionLevel Optimal
     - name: Upload assets to release
       uses: softprops/action-gh-release@v2.5.0
       with:
