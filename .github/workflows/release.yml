@@ -1,0 +1,23 @@
+name: Upload releases assets
+
+on:
+  release:
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+"
+    types: [published]
+
+jobs:
+  package:
+    name: Package
+    runs-on: windows-latest
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v6
+    - name: Create zip of resources
+      run: |
+        Compress-Archive -Path README.md, demolist.ini, demos, wads -DestinationPath odatests-resources.zip -CompressionLevel Optimal
+    - name: Upload assets to release
+      uses: softprops/action-gh-release@v2.5.0
+      with:
+        files: |
+          odatests-resources.zip
